@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { SearchPresenter } from './search.presenter';
 
-describe(SearchPresenter.name, () => {
+describe('SearchPresenter', () => {
   let presenter: SearchPresenter;
 
   beforeEach(() => {
@@ -13,14 +13,13 @@ describe(SearchPresenter.name, () => {
 
   describe('emits search terms', () => {
     const debounceTime = 300;
-    let searchTermsSpy: jasmine.Spy;
+    let searchTermsSpy: jest.Mock<any, any>;
     let searchTermsSubscription: Subscription;
 
     beforeEach(() => {
-      searchTermsSpy = jasmine.createSpy('searchTermsSpy');
-      searchTermsSubscription = presenter.searchTerms$.subscribe(
-        searchTermsSpy
-      );
+      searchTermsSpy = jest.fn();
+      searchTermsSubscription =
+        presenter.searchTerms$.subscribe(searchTermsSpy);
     });
 
     afterEach(() => {
@@ -127,14 +126,13 @@ describe(SearchPresenter.name, () => {
 
   describe('does not emit search terms', () => {
     const debounceTime = 300;
-    let searchTermsSpy: jasmine.Spy;
+    let searchTermsSpy: jest.Mock<any, any>;
     let searchTermsSubscription: Subscription;
 
     beforeEach(() => {
-      searchTermsSpy = jasmine.createSpy('searchTermsSpy');
-      searchTermsSubscription = presenter.searchTerms$.subscribe(
-        searchTermsSpy
-      );
+      searchTermsSpy = jest.fn();
+      searchTermsSubscription =
+        presenter.searchTerms$.subscribe(searchTermsSpy);
     });
 
     afterEach(() => {

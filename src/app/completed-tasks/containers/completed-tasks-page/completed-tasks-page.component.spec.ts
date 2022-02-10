@@ -21,13 +21,13 @@ import { CompletedTasksPageComponent } from './completed-tasks-page.component';
 
 import { cold } from 'jasmine-marbles';
 
-describe(CompletedTasksPageComponent.name, () => {
+describe('CompletedTasksPageComponent', () => {
   let component: CompletedTasksPageComponent;
   let fixture: ComponentFixture<CompletedTasksPageComponent>;
   let mockStore: MockStore;
 
   const destroy: Subject<void> = new Subject();
-  const observer: jasmine.Spy = jasmine.createSpy('tasks observer');
+  const observer = jest.fn();
 
   const expectedTasks: CompletedTask[] = [
     {
@@ -117,7 +117,7 @@ describe(CompletedTasksPageComponent.name, () => {
     fixture = TestBed.createComponent(CompletedTasksPageComponent);
     mockStore = TestBed.inject(MockStore);
 
-    spyOn(mockStore, 'dispatch');
+    jest.spyOn(mockStore, 'dispatch').mockImplementation(() => {});
     component = fixture.componentInstance;
 
     component.completedTasks$.pipe(takeUntil(destroy)).subscribe(observer);
@@ -126,7 +126,7 @@ describe(CompletedTasksPageComponent.name, () => {
 
   afterEach(() => {
     destroy.next();
-    observer.calls.reset();
+    // observer.calls.reset();
   });
 
   afterAll(() => {

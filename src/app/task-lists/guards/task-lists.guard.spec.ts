@@ -14,12 +14,10 @@ import { TaskListsGuard } from './task-lists.guard';
 
 import { getTestScheduler } from 'jasmine-marbles';
 
-describe(TaskListsGuard.name, () => {
+describe('TaskListsGuard', () => {
   let guard: TaskListsGuard;
   let mockStore: MockStore;
   let taskListSelectorsSelectLoaded: MemoizedSelector<TaskState, boolean>;
-
-  let mockStoreDispatchSpy: jasmine.Spy;
 
   const dummyUrl = 'dummy/url';
   const route: Route = { path: dummyUrl };
@@ -31,7 +29,7 @@ describe(TaskListsGuard.name, () => {
     });
 
     mockStore = TestBed.inject(MockStore);
-    mockStoreDispatchSpy = spyOn(mockStore, 'dispatch');
+    jest.spyOn(mockStore, 'dispatch').mockImplementation(() => {});
 
     guard = TestBed.inject(TaskListsGuard);
 
@@ -53,8 +51,8 @@ describe(TaskListsGuard.name, () => {
       const action = TaskListsGuardActions.timeout({
         requestedUrl: `/${dummyUrl}`,
       });
-      expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(1);
-      expect(mockStoreDispatchSpy).toHaveBeenCalledWith(action);
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+      expect(mockStore.dispatch).toHaveBeenCalledWith(action);
 
       // suppress 'has no expectations' warnings.
       // expect().nothing();
@@ -68,7 +66,7 @@ describe(TaskListsGuard.name, () => {
       });
 
       // suppress 'has no expectations' warnings.
-      expect().nothing();
+      // expect().nothing();
     });
   });
 });

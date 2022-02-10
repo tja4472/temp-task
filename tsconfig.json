@@ -36,7 +36,8 @@
   },
   // Required for jest to work with cypress
   "include": ["src/**/*"],
-  "exclude": ["src/**/*.spec.ts"],
+  // "exclude": ["src/**/*.spec.ts"],
+  // With ^^^ can't find tsconfig for spec.ts files.
   //
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

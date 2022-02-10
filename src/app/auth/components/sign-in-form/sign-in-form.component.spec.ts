@@ -11,13 +11,13 @@ import userEvent from '@testing-library/user-event';
 async function setup({
   errorMessage = null,
   pending = false,
-  submittedSpy = jasmine.createSpy('submitted'),
-  signUpClickedSpy = jasmine.createSpy('signUpClicked'),
+  submittedSpy = jest.fn(),
+  signUpClickedSpy = jest.fn(),
 }: {
   errorMessage?: null | string;
   pending?: boolean;
-  submittedSpy?: jasmine.Spy<jasmine.Func>;
-  signUpClickedSpy?: jasmine.Spy<jasmine.Func>;
+  submittedSpy?: jest.Mock<any, any>;
+  signUpClickedSpy?: jest.Mock<any, any>;
 }) {
   const component = await render(SignInFormComponent, {
     imports: [
@@ -65,18 +65,18 @@ describe('@testing-library/angular', () => {
 
     const componentInstance = component.fixture.componentInstance;
 
-    expect(componentInstance.viewForm.dirty).toBeFalsy('dirty');
-    expect(componentInstance.viewForm.pristine).toBeTruthy('pristine');
-    expect(componentInstance.viewForm.touched).toBeFalsy('touched');
-    expect(componentInstance.viewForm.valid).toBeFalsy('valid');
+    expect(componentInstance.viewForm.dirty).toBeFalsy();
+    expect(componentInstance.viewForm.pristine).toBeTruthy();
+    expect(componentInstance.viewForm.touched).toBeFalsy();
+    expect(componentInstance.viewForm.valid).toBeFalsy();
 
     // touch control to show validation error.
     fireEvent.blur(userNameControl);
 
-    expect(componentInstance.viewForm.dirty).toBeFalsy('dirty');
-    expect(componentInstance.viewForm.pristine).toBeTruthy('pristine');
-    expect(componentInstance.viewForm.touched).toBeTruthy('touched');
-    expect(componentInstance.viewForm.valid).toBeFalsy('valid');
+    expect(componentInstance.viewForm.dirty).toBeFalsy();
+    expect(componentInstance.viewForm.pristine).toBeTruthy();
+    expect(componentInstance.viewForm.touched).toBeTruthy();
+    expect(componentInstance.viewForm.valid).toBeFalsy();
 
     expect(screen.queryByText('User Name is required')).not.toBeNull();
 
@@ -90,10 +90,10 @@ describe('@testing-library/angular', () => {
       },
     });
 */
-    expect(componentInstance.viewForm.dirty).toBeTruthy('dirty');
-    expect(componentInstance.viewForm.pristine).toBeFalsy('pristine');
-    expect(componentInstance.viewForm.touched).toBeTruthy('touched');
-    expect(componentInstance.viewForm.valid).toBeFalsy('valid');
+    expect(componentInstance.viewForm.dirty).toBeTruthy();
+    expect(componentInstance.viewForm.pristine).toBeFalsy();
+    expect(componentInstance.viewForm.touched).toBeTruthy();
+    expect(componentInstance.viewForm.valid).toBeFalsy();
 
     expect(screen.queryByText('User Name is required')).toBeNull();
 
@@ -104,15 +104,15 @@ describe('@testing-library/angular', () => {
       },
     });
 
-    expect(componentInstance.viewForm.valid).toBeFalsy('valid');
+    expect(componentInstance.viewForm.valid).toBeFalsy();
     expect(screen.queryByText('User Name is required')).not.toBeNull();
 
     // suppress 'has no expectations' warnings.
-    expect().nothing();
+    // expect().nothing();
   });
 });
 
-describe(SignInFormComponent.name, () => {
+describe('SignInFormComponent', () => {
   it('shows error message', async () => {
     const errorMessage = 'abcdefghi';
     const { component } = await setup({ errorMessage });
@@ -120,7 +120,7 @@ describe(SignInFormComponent.name, () => {
     component.getByText(errorMessage);
 
     // suppress 'has no expectations' warnings.
-    expect().nothing();
+    // expect().nothing();
   });
 
   it('is disabled when pending', async () => {
@@ -132,19 +132,13 @@ describe(SignInFormComponent.name, () => {
     } = await setup({ pending: true });
 
     // screen.debug(signInButtonControl);
-    expect(userNameControl.getAttribute('disabled')).toBe('', 'username');
-    expect(passwordControl.getAttribute('disabled')).toBe('', 'password');
-    expect(signInButtonControl.getAttribute('disabled')).toBe(
-      'true',
-      'signInButton'
-    );
-    expect(signUpButtonControl.getAttribute('disabled')).toBe(
-      'true',
-      'signUpButton'
-    );
+    expect(userNameControl.getAttribute('disabled')).toBe('');
+    expect(passwordControl.getAttribute('disabled')).toBe('');
+    expect(signInButtonControl.getAttribute('disabled')).toBe('true');
+    expect(signUpButtonControl.getAttribute('disabled')).toBe('true');
 
     // suppress 'has no expectations' warnings.
-    expect().nothing();
+    // expect().nothing();
   });
 
   it('should display error messages and submit if valid', async () => {
@@ -158,13 +152,8 @@ describe(SignInFormComponent.name, () => {
       submittedSpy,
     } = await setup({});
 
-    expect(signInButtonControl.getAttribute('disabled')).toBe(
-      'true',
-      'signInButton'
-    );
-    expect(signUpButtonControl.getAttribute('disabled')).toBeNull(
-      'signUpButton'
-    );
+    expect(signInButtonControl.getAttribute('disabled')).toBe('true');
+    expect(signUpButtonControl.getAttribute('disabled')).toBeNull();
 
     // touch control to show validation error.
     fireEvent.blur(userNameControl);
@@ -193,12 +182,8 @@ describe(SignInFormComponent.name, () => {
     expect(screen.queryByText('Password is required')).toBeNull();
 
     // Form valid.
-    expect(signInButtonControl.getAttribute('disabled')).toBeNull(
-      'signInButton'
-    );
-    expect(signUpButtonControl.getAttribute('disabled')).toBeNull(
-      'signUpButton'
-    );
+    expect(signInButtonControl.getAttribute('disabled')).toBeNull();
+    expect(signUpButtonControl.getAttribute('disabled')).toBeNull();
 
     // Clear user name.
     fireEvent.input(userNameControl, {

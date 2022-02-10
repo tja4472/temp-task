@@ -53,7 +53,7 @@ async function setup({
   });
 
   const mockStore = TestBed.inject(MockStore);
-  const mockStoreDispatchSpy = spyOn(mockStore, 'dispatch');
+  const mockStoreDispatchSpy = jest.spyOn(mockStore, 'dispatch');
 
   return {
     component,
@@ -67,7 +67,7 @@ async function setup({
 }
 
 // need ngrx mock store and selectors
-describe(SignInPageComponent.name, () => {
+describe('SignInPageComponent', () => {
   it('shows error message', async () => {
     const errorMessage = 'abcdefghi';
     const { component } = await setup({ errorMessage });
@@ -75,7 +75,7 @@ describe(SignInPageComponent.name, () => {
     component.getByText(errorMessage);
 
     // suppress 'has no expectations' warnings.
-    expect().nothing();
+    // expect().nothing();
   });
 
   it('is disabled when pending', async () => {
@@ -87,19 +87,13 @@ describe(SignInPageComponent.name, () => {
     } = await setup({ pending: true });
 
     // screen.debug(signInButtonControl);
-    expect(userNameControl.getAttribute('disabled')).toBe('', 'username');
-    expect(passwordControl.getAttribute('disabled')).toBe('', 'password');
-    expect(signInButtonControl.getAttribute('disabled')).toBe(
-      'true',
-      'signInButton'
-    );
-    expect(signUpButtonControl.getAttribute('disabled')).toBe(
-      'true',
-      'signUpButton'
-    );
+    expect(userNameControl.getAttribute('disabled')).toBe('');
+    expect(passwordControl.getAttribute('disabled')).toBe('');
+    expect(signInButtonControl.getAttribute('disabled')).toBe('true');
+    expect(signUpButtonControl.getAttribute('disabled')).toBe('true');
 
     // suppress 'has no expectations' warnings.
-    expect().nothing();
+    // expect().nothing();
   });
 
   it('dispatches actions', async () => {

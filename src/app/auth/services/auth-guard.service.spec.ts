@@ -17,7 +17,7 @@ import { getTestScheduler } from 'jasmine-marbles';
 // Marble syntax
 // https://rxjs-dev.firebaseapp.com/guide/testing/internal-marble-tests#marble-syntax
 
-describe(AuthGuardService.name, () => {
+describe('AuthGuardService', () => {
   let authGuardService: AuthGuardService;
   // Store
   let mockStore: MockStore;
@@ -25,16 +25,16 @@ describe(AuthGuardService.name, () => {
   let authSelectorsSelectHasChecked: MemoizedSelector<AuthRootState, boolean>;
   let authSelectorsSelectHasUser: MemoizedSelector<AuthRootState, boolean>;
   // Spies
-  let mockStoreDispatchSpy: jasmine.Spy;
-  let spyObjRouterStateSnapshot: jasmine.SpyObj<RouterStateSnapshot>;
-  let spyObjActivatedRouteSnapshot: jasmine.SpyObj<ActivatedRouteSnapshot>;
+  // let mockStoreDispatchSpy: jasmine.Spy;
+  // let spyObjRouterStateSnapshot: jasmine.SpyObj<RouterStateSnapshot>;
+  // let spyObjActivatedRouteSnapshot: jasmine.SpyObj<ActivatedRouteSnapshot>;
 
   const dummyUrl = 'dummy/url';
 
   beforeEach(() => {
-    const spyObjAuthService = jasmine.createSpyObj<AuthService>('AuthService', [
-      'redirectUrl',
-    ]);
+    const spyObjAuthService = {
+      redirectUrl: jest.fn(),
+    };
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
@@ -46,21 +46,19 @@ describe(AuthGuardService.name, () => {
     });
 
     mockStore = TestBed.inject(MockStore);
-    mockStoreDispatchSpy = spyOn(mockStore, 'dispatch');
+    jest.spyOn(mockStore, 'dispatch');
 
     authGuardService = TestBed.inject(AuthGuardService);
-
+    /*
     // create a jasmine spy object, of the required type
     // toString is because we have to mock at least one method
-    spyObjRouterStateSnapshot = jasmine.createSpyObj<RouterStateSnapshot>(
-      'RouterStateSnapshot',
-      ['toString']
-    );
-    spyObjActivatedRouteSnapshot = jasmine.createSpyObj<ActivatedRouteSnapshot>(
-      'ActivatedRouteSnapshot',
-      ['toString']
-    );
-
+    spyObjRouterStateSnapshot = {
+      'toString': jest.fn()
+    };
+    spyObjActivatedRouteSnapshot = {
+      'toString': jest.fn()
+    };
+*/
     authSelectorsSelectHasChecked = mockStore.overrideSelector(
       AuthSelectors.selectHasChecked,
       false
@@ -73,37 +71,35 @@ describe(AuthGuardService.name, () => {
 
   describe('canActivate', () => {
     it('should return NEVER if auth has not been checked', () => {
-      spyObjRouterStateSnapshot.url = dummyUrl;
+      // spyObjRouterStateSnapshot.url = dummyUrl;
 
       const scheduler = getTestScheduler();
       scheduler.run(({ expectObservable }) => {
         expectObservable(
           authGuardService.canActivate(
-            spyObjActivatedRouteSnapshot,
-            spyObjRouterStateSnapshot
+            TestMockData.dummyRoute, TestMockData.fakeRouterState(dummyUrl)
           )
         ).toBe('--', {
           a: false,
         });
       });
 
-      expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(0);
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(0);
 
       // suppress 'has no expectations' warnings.
-      expect().nothing();
+      // expect().nothing();
     });
 
     it('should return Observable<false> if auth has been checked and not signed in', () => {
       authSelectorsSelectHasChecked.setResult(true);
 
-      spyObjRouterStateSnapshot.url = dummyUrl;
+      // spyObjRouterStateSnapshot.url = dummyUrl;
 
       const scheduler = getTestScheduler();
       scheduler.run(({ expectObservable }) => {
         expectObservable(
           authGuardService.canActivate(
-            spyObjActivatedRouteSnapshot,
-            spyObjRouterStateSnapshot
+        TestMockData.dummyRoute, TestMockData.fakeRouterState(dummyUrl)
           )
         ).toBe('(a|)', {
           a: false,
@@ -113,71 +109,68 @@ describe(AuthGuardService.name, () => {
       const action = AuthGuardServiceActions.navigateToSignIn({
         requestedUrl: dummyUrl,
       });
-      expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(1);
-      expect(mockStoreDispatchSpy).toHaveBeenCalledWith(action);
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+      expect(mockStore.dispatch).toHaveBeenCalledWith(action);
 
       // suppress 'has no expectations' warnings.
-      expect().nothing();
+      // expect().nothing();
     });
 
     it('should return Observable<true> if auth has been checked and is signed in', () => {
       authSelectorsSelectHasChecked.setResult(true);
       authSelectorsSelectHasUser.setResult(true);
 
-      spyObjRouterStateSnapshot.url = dummyUrl;
+      // spyObjRouterStateSnapshot.url = dummyUrl;
 
       const scheduler = getTestScheduler();
       scheduler.run(({ expectObservable }) => {
         expectObservable(
           authGuardService.canActivate(
-            spyObjActivatedRouteSnapshot,
-            spyObjRouterStateSnapshot
+        TestMockData.dummyRoute, TestMockData.fakeRouterState(dummyUrl)
           )
         ).toBe('(a|)', {
           a: true,
         });
       });
 
-      expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(0);
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(0);
 
       // suppress 'has no expectations' warnings.
-      expect().nothing();
+      // expect().nothing();
     });
   });
 
   describe('canLoad', () => {
     it('should return NEVER if auth has not been checked', () => {
-      spyObjRouterStateSnapshot.url = dummyUrl;
+      // spyObjRouterStateSnapshot.url = dummyUrl;
 
       const scheduler = getTestScheduler();
       scheduler.run(({ expectObservable }) => {
         expectObservable(
           authGuardService.canActivate(
-            spyObjActivatedRouteSnapshot,
-            spyObjRouterStateSnapshot
+        TestMockData.dummyRoute, TestMockData.fakeRouterState(dummyUrl)
           )
         ).toBe('--', {
           a: false,
         });
       });
 
-      expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(0);
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(0);
 
       // suppress 'has no expectations' warnings.
-      expect().nothing();
+      // expect().nothing();
     });
 
     it('should return Observable<false> if auth has been checked and not signed in', () => {
       authSelectorsSelectHasChecked.setResult(true);
 
-      spyObjRouterStateSnapshot.url = dummyUrl;
+      // spyObjRouterStateSnapshot.url = dummyUrl;
 
       const scheduler = getTestScheduler();
       scheduler.run(({ expectObservable }) => {
         expectObservable(
           authGuardService.canActivate(
-            spyObjActivatedRouteSnapshot,
-            spyObjRouterStateSnapshot
+        TestMockData.dummyRoute, TestMockData.fakeRouterState(dummyUrl)
           )
         ).toBe('(a|)', {
           a: false,
@@ -187,35 +180,46 @@ describe(AuthGuardService.name, () => {
       const action = AuthGuardServiceActions.navigateToSignIn({
         requestedUrl: dummyUrl,
       });
-      expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(1);
-      expect(mockStoreDispatchSpy).toHaveBeenCalledWith(action);
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+      expect(mockStore.dispatch).toHaveBeenCalledWith(action);
 
       // suppress 'has no expectations' warnings.
-      expect().nothing();
+      // expect().nothing();
     });
 
     it('should return Observable<true> if auth has been checked and is signed in', () => {
       authSelectorsSelectHasChecked.setResult(true);
       authSelectorsSelectHasUser.setResult(true);
 
-      spyObjRouterStateSnapshot.url = dummyUrl;
+      // spyObjRouterStateSnapshot.url = dummyUrl;
 
       const scheduler = getTestScheduler();
       scheduler.run(({ expectObservable }) => {
         expectObservable(
           authGuardService.canActivate(
-            spyObjActivatedRouteSnapshot,
-            spyObjRouterStateSnapshot
+        TestMockData.dummyRoute, TestMockData.fakeRouterState(dummyUrl)
           )
         ).toBe('(a|)', {
           a: true,
         });
       });
 
-      expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(0);
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(0);
 
       // suppress 'has no expectations' warnings.
-      expect().nothing();
+      // expect().nothing();
     });
   });
 });
+
+class TestMockData {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+  static dummyRoute = {} as ActivatedRouteSnapshot;
+
+  static fakeRouterState(url: string): RouterStateSnapshot {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return {
+      url,
+    } as RouterStateSnapshot;
+  }
+}

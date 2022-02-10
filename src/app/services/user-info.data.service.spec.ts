@@ -70,7 +70,7 @@ describe('Service: UserInfoDataService - TestBed', () => {
 
   @Injectable()
   class FakeEnvironmentService extends EnvironmentService {
-    get appCode() {
+    override get appCode() {
       return 'aa';
     }
   }
@@ -113,7 +113,7 @@ describe('Service: UserInfoDataService - TestBed', () => {
 */
 });
 
-describe('UserInfoDataService - AngularFirestoreStub', () => {
+describe.skip('UserInfoDataService - AngularFirestoreStub', () => {
   const AngularFirestoreStub = {
     // I just mocked the function you need, if there are more, you can add them here.
     // collection: (someString) => {
@@ -126,6 +126,7 @@ describe('UserInfoDataService - AngularFirestoreStub', () => {
   let environmentService: EnvironmentService;
   let userInfoDataService: UserInfoDataService;
 
+  /*
   beforeEach(() => {
     TestBed.configureTestingModule({
       // Provide both the service-to-test and its dependencies.
@@ -140,6 +141,7 @@ describe('UserInfoDataService - AngularFirestoreStub', () => {
     userInfoDataService = TestBed.inject(UserInfoDataService);
     environmentService = TestBed.inject(EnvironmentService);
   });
+  */
   /*
   it('should be created', inject(
     [UserInfoDataService],

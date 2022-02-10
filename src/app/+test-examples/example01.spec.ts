@@ -19,7 +19,8 @@ import {
 
 import { cold } from 'jasmine-marbles';
 
-describe('example01-' + CompletedTasksPageComponent.name, () => {
+// describe('example01-' + CompletedTasksPageComponent.name, () => {
+describe('example01-CompletedTasksPageComponent', () => {
   let component: CompletedTasksPageComponent;
   let fixture: ComponentFixture<CompletedTasksPageComponent>;
   let store: MockStore;
@@ -43,7 +44,7 @@ describe('example01-' + CompletedTasksPageComponent.name, () => {
     fixture = TestBed.createComponent(CompletedTasksPageComponent);
     store = TestBed.inject(MockStore);
 
-    spyOn(store, 'dispatch');
+    jest.spyOn(store, 'dispatch').mockImplementation(() => {});
     component = fixture.componentInstance;
   });
 

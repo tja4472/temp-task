@@ -19,7 +19,7 @@ import { TaskListDetailEditPageComponentGuard } from './task-list-detail-edit-pa
 
 import { getTestScheduler } from 'jasmine-marbles';
 
-describe(TaskListDetailEditPageComponentGuard.name, () => {
+describe('TaskListDetailEditPageComponentGuard', () => {
   let guard: TaskListDetailEditPageComponentGuard;
   let mockStore: MockStore;
   let router: Router;
@@ -29,20 +29,17 @@ describe(TaskListDetailEditPageComponentGuard.name, () => {
     TaskListListItem | undefined
   >;
 
-  let mockStoreDispatchSpy: jasmine.Spy;
-  let routerNavigateSpy: jasmine.Spy;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule.withRoutes([])],
       providers: [TaskListDetailEditPageComponentGuard, provideMockStore()],
     });
 
     mockStore = TestBed.inject(MockStore);
-    mockStoreDispatchSpy = spyOn(mockStore, 'dispatch');
+    jest.spyOn(mockStore, 'dispatch');
 
     router = TestBed.inject(Router);
-    routerNavigateSpy = spyOn(router, 'navigate');
+    jest.spyOn(router, 'navigate');
 
     guard = TestBed.inject(TaskListDetailEditPageComponentGuard);
 
@@ -63,7 +60,7 @@ describe(TaskListDetailEditPageComponentGuard.name, () => {
     });
 
     // suppress 'has no expectations' warnings.
-    expect().nothing();
+    // expect().nothing();
   });
 
   it('canActivate should return Observable<false> if url task list does not exist in store', () => {
@@ -74,14 +71,17 @@ describe(TaskListDetailEditPageComponentGuard.name, () => {
       expectObservable(guard.canActivate()).toBe('(a|)', { a: false });
     });
 
-    const action = TaskListDetailEditPageComponentGuardActions.taskListNotFound();
-    expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(1);
-    expect(mockStoreDispatchSpy).toHaveBeenCalledWith(action);
+    const action =
+      TaskListDetailEditPageComponentGuardActions.taskListNotFound();
+    expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+    expect(mockStore.dispatch).toHaveBeenCalledWith(action);
 
-    expect(routerNavigateSpy).toHaveBeenCalledTimes(1);
-    expect(routerNavigateSpy).toHaveBeenCalledWith(['/404'], {
+    expect(router.navigate).toHaveBeenCalledTimes(1);
+    // expect(router.navigate).toHaveBeenCalledWith(['/404']);    
+    
+    expect(router.navigate).toHaveBeenCalledWith(['/404'], {
       skipLocationChange: true,
-    });
+    });   
   });
 
   it('canActivate should return Observable<true> if url task list does exist in store', () => {
@@ -98,7 +98,7 @@ describe(TaskListDetailEditPageComponentGuard.name, () => {
       expectObservable(guard.canActivate()).toBe('(a|)', { a: true });
     });
 
-    expect(mockStoreDispatchSpy).toHaveBeenCalledTimes(0);
-    expect(routerNavigateSpy).toHaveBeenCalledTimes(0);
+    expect(mockStore.dispatch).toHaveBeenCalledTimes(0);
+    expect(router.navigate).toHaveBeenCalledTimes(0);
   });
 });
