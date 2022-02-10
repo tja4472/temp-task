@@ -1,0 +1,73 @@
+<!--
+<pre>
+  {{ viewGroupedArray | json }}
+</pre>
+-->
+<mat-list class="list app-class">
+  <div *ngFor="let group of viewGroupByDateArray">
+    <h3 matSubHeader>{{ group.header }}</h3>
+    <mat-list-item *ngFor="let item of group.tasks; trackBy: viewTrackBy">
+      <div class="list-item">
+        <mat-checkbox
+          [checked]="item.isComplete"
+          (change)="toggleCompleteItem.emit(item)"
+        ></mat-checkbox>
+        <a [routerLink]="[editPath(), item.id]">
+          <div class="middle">
+            <div class="name">{{ item.name }}</div>
+            <div class="description">{{ item.description }}</div>
+          </div>
+        </a>
+        <!-- 
+        <div class="middle">
+          <div class="name">{{ item.name }}</div>
+          <div class="description">{{ item.description }}</div>
+        </div>
+-->
+
+        <mat-divider [inset]="true"></mat-divider>
+      </div>
+    </mat-list-item>
+  </div>
+</mat-list>
+
+<!--
+<mat-list class="list">
+  <div *ngFor="let group of viewGroupByDateArray">
+    <h3 matSubHeader>{{ group.header }}</h3>
+    <mat-list-item *ngFor="let item of group.tasks" >
+      <mat-checkbox
+        [checked]="item.isComplete"
+        (change)="toggleCompleteItem.emit(item)"
+      ></mat-checkbox>
+      <a [routerLink]="['/tasks/completed/edit', item.id]">
+        <div class="middle">
+          <div class="name">{{ item.name }}</div>
+          <div class="description">{{ item.description }}</div>
+        </div>
+      </a>
+      <mat-divider [inset]="true"></mat-divider>
+    </mat-list-item>
+  </div>
+</mat-list>  
+-->
+
+<!--
+<div class="list">
+  <div *ngFor="let task of currentTasks; trackBy: viewTrackBy">
+    <div class="list-item">
+      <mat-checkbox
+        [checked]="task.isComplete"
+        (change)="toggleCompleteItem.emit(task)"
+      ></mat-checkbox>
+
+      <a [routerLink]="['/tasks/completed/edit', task.id]">
+        <div class="middle" [ngClass]="{ 'line-through': task.isComplete }">
+          <div class="name">{{ task.name }}</div>
+          <div class="description">{{ task.description }}</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+-->

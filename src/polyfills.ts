@@ -25,7 +25,7 @@
  * will put import in the top of bundle, so user need to create a separate file
  * in this directory (for example: zone-flags.ts), and put the following flags
  * into that file, and then add the following code before importing zone.js.
- * import './zone-flags';
+ * import './zone-flags.ts';
  *
  * The flags allowed in zone-flags.ts are listed here.
  *
@@ -50,3 +50,5 @@ import 'zone.js'; // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+// tslint:disable-next-line: ordered-imports
+import 'first-input-delay';

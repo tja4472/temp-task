@@ -1,0 +1,70 @@
+<form [formGroup]="viewForm" novalidate (ngSubmit)="viewOnSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!(this.viewForm.dirty && this.viewForm.valid)"
+      >
+        Sign Up
+      </button>
+    </mat-card-actions>
+    <mat-card-header>
+      <mat-card-title>Sign Up</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              id="username"
+              placeholder="User Name"
+              formControlName="username"
+            />
+            <mat-error
+              *ngIf="viewForm.controls['username'].hasError('required')"
+            >
+              User Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              type="password"
+              id="password"
+              placeholder="Password"
+              formControlName="password"
+            />
+            <mat-error
+              *ngIf="viewForm.controls['password'].hasError('required')"
+            >
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="!!errorMessage">
+        <mat-error>
+          {{ errorMessage }}
+        </mat-error>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>
+
+<!--
+<pre>
+Form Value: {{ loginForm.value | json }}
+</pre>
+
+<pre>
+Form Status: {{ loginForm.status }}
+</pre>
+-->

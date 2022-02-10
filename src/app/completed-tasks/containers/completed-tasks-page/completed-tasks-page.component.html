@@ -1,0 +1,15 @@
+<app-search
+  [searchText]="viewSearchQuery$ | async"
+  (search)="viewSearch($event)"
+></app-search>
+<app-completed-task-list
+  [currentTasks]="completedTasks$ | async"
+  (toggleCompleteItem)="toggleCompleteItem($event)"
+>
+</app-completed-task-list>
+
+<!--
+<pre>
+Completed Tasks: {{ completedTasks$ | async | json }}
+</pre>
+-->

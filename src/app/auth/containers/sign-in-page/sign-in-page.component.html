@@ -1,0 +1,6 @@
+<app-sign-in-form
+  [errorMessage]="error$ | async"
+  [pending]="pending$ | async"
+  (SignUpClicked)="onSignUp()"
+  (submitted)="onSubmitted($event)"
+></app-sign-in-form>

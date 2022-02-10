@@ -1,0 +1,10 @@
+<app-current-task-detail-edit
+  [todo]="task$ | async"
+  (cancel)="viewCancelled($event)"
+  (remove)="viewRemoved($event)"
+  (checkout)="viewSaved($event)"
+>
+</app-current-task-detail-edit>
+<pre>
+Selected Current Task: {{ task$ | async | json }}
+</pre>

@@ -1,0 +1,83 @@
+<form [formGroup]="viewForm" novalidate (ngSubmit)="viewOnSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!(this.viewForm.dirty && this.viewForm.valid)"
+      >
+        Sign In
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        type="button"
+        [disabled]="this.viewForm.disabled"
+        (click)="viewSignUpClick()"
+      >
+        Sign Up
+      </button>
+    </mat-card-actions>
+    <mat-card-header>
+      <mat-card-title>Sign In</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              id="username"
+              data-testid="username"
+              placeholder="User Name"
+              formControlName="username"
+              required
+            />
+            <mat-error
+              *ngIf="viewForm.controls['username'].hasError('required')"
+            >
+              User Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              type="password"
+              id="password"
+              data-testid="password"
+              placeholder="Password"
+              formControlName="password"
+              required
+            />
+            <mat-error
+              *ngIf="viewForm.controls['password'].hasError('required')"
+            >
+              Password is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="!!errorMessage">
+        <mat-error>
+          {{ errorMessage }}
+        </mat-error>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>
+
+<!--
+<pre>
+Form Value: {{ loginForm.value | json }}
+</pre>
+
+<pre>
+Form Status: {{ loginForm.status }}
+</pre>
+-->

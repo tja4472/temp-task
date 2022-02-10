@@ -1,0 +1,18 @@
+<mat-form-field appearance="fill">
+  <mat-icon matPrefix>search</mat-icon>
+  <mat-label>Search</mat-label>
+  <input
+    type="text"
+    matInput
+    placeholder="Search"
+    [formControl]="viewSearchControl"
+  />
+  <button
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="viewClearSearch()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>

@@ -1,0 +1,14 @@
+:host {
+  background-color: green;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.more-vert-menu {
+  color: white;
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+}

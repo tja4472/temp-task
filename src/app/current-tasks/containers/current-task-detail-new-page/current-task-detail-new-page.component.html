@@ -1,0 +1,9 @@
+<app-current-task-detail-new
+  [todo]="task"
+  (cancel)="viewCancelled($event)"
+  (checkout)="viewSaved($event)"
+>
+</app-current-task-detail-new>
+<pre>
+Selected Current Task: {{ task | json }}
+</pre>

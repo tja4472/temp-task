@@ -1,0 +1,9 @@
+<app-task-list-detail-new
+  [completedTask]="task$"
+  (cancel)="viewCancelled($event)"
+  (checkout)="viewSaved($event)"
+>
+</app-task-list-detail-new>
+<pre>
+Selected Task List: {{ task$ | json }}
+</pre>

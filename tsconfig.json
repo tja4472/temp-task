@@ -8,7 +8,7 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
+
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
@@ -19,12 +19,20 @@
     "target": "es2017",
     "module": "es2020",
     "lib": ["es2020", "dom"],
+    // From ngrx-task
+    "noImplicitReturns": false,    
+    "strictPropertyInitialization": false,   
+    // ^^^^     
     // Added to ng new app
     "types": ["jest"],
     "paths": {
       "@app/*": ["src/app/*"]
-    }
+    },
     // ^^^^
+    // Required for angularfire to work with typescript 4.5.5
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
+    // ^^^^    
   },
   // Required for jest to work with cypress
   "include": ["src/**/*"],
@@ -34,6 +42,9 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    // From ngrx-task
+    "strictNullInputTypes": false,   
+    // ^^^^      
   }
 }

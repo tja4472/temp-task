@@ -1,0 +1,10 @@
+<app-task-list-list
+  [currentTasks]="taskLists$ | async"
+  (newCurrentTask)="viewNewCurrentTask()"
+>
+</app-task-list-list>
+<!---
+<pre>
+Task Lists: {{ taskLists$ | async | json }}
+</pre>
+-->

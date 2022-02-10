@@ -1,0 +1,15 @@
+<div class="list">
+  <div *ngFor="let task of currentTasks">
+    <div class="list-item">
+      <a [routerLink]="[editPath(), task.id]">
+        <div class="middle">
+          <div class="name">{{ task.name }}</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<button mat-fab class="fab-bottom-right" (click)="newCurrentTask.emit()">
+  <mat-icon>add</mat-icon>
+</button>

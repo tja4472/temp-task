@@ -1,0 +1,21 @@
+<app-current-task-list
+  [currentTasks]="currentTasks$ | async"
+  (reorderItems)="reorderItems($event)"
+  (newCurrentTask)="viewNewCurrentTask()"
+  (toggleCompleteItem)="toggleCompleteItem($event)"
+>
+</app-current-task-list>
+
+<button class="more-vert-menu" mat-icon-button [matMenuTriggerFor]="appMenu">
+  <mat-icon>more_vert</mat-icon>
+</button>
+
+<mat-menu #appMenu="matMenu">
+  <button mat-menu-item (click)="viewClearCompleted()">Clear Completed</button>
+</mat-menu>
+
+<!--
+<pre>
+Current Tasks: {{ currentTasks$ | async | json }}
+</pre>
+-->
