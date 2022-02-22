@@ -211,12 +211,19 @@ export class AuthEffects implements OnInitEffects {
         ofType(SignUpPageActions.signUp),
         tap((action) => {
           const password = action.credentials.password;
-
+          this.authService.signUp(action.credentials.username, password);
+          /*
           this.afAuth
             .createUserWithEmailAndPassword(
               action.credentials.username,
               password
             )
+            .then((userCredential) => {
+              console.log('#### SignUp ####');
+              if (userCredential.user) {
+                this.authService.addUserData(userCredential.user.uid);
+              }
+            })
             .catch((error) =>
               this.store.dispatch(
                 AuthApiActions.signUpFailure({
@@ -227,6 +234,7 @@ export class AuthEffects implements OnInitEffects {
                 })
               )
             );
+*/
         })
       );
     },

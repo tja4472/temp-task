@@ -61,6 +61,8 @@ export class UserInfoDataService {
     */
     console.log('environmentService.appCode>', environmentService.appCode);
     // console.log('USERS_COLLECTION>', USERS_COLLECTION);
+
+    // create user collection if missing
   }
 
   public async getUserData(userId: string): Promise<UserInfo> {
@@ -78,6 +80,12 @@ export class UserInfoDataService {
     return defaultValue;
   }
 
+  public async addUserData(userId: string): Promise<UserInfo> {
+    const defaultValue = newUserInfo();
+    await this.save(defaultValue, userId);
+    return defaultValue;
+  }
+  
   /*
   public getSingleItem$(userId: string) {
     const doc = this.getItem$(userId)

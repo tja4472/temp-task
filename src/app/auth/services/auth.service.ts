@@ -8,6 +8,7 @@ import { first, map, switchMap } from 'rxjs/operators';
 import { UserInfoDataService } from '@app/services/user-info.data.service';
 
 import { AppUser } from '../models/app-user.model';
+import { TaskListDataService } from '@app/services/task-list.data.service';
 
 // https://benjaminjohnson.me/blog/typesafe-errors-in-typescript
 type ResultSuccess<T> = { type: 'success'; value: T };
@@ -26,6 +27,7 @@ export class AuthService {
 
   constructor(
     private readonly auth: AngularFireAuth,
+    private taskListDataService: TaskListDataService,
     private userInfoDataService: UserInfoDataService
   ) {
     this.appUser$ = this.auth.user.pipe(
@@ -62,6 +64,27 @@ export class AuthService {
         })
       )
 */
+  public async addUserData(userId: string) {
+    await this.userInfoDataService.addUserData(userId);
+  }
+
+  async signUp(email: string, password: string) {
+    const userCredential = await this.auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
+    if (userCredential.user) {
+      const userInfo = await this.userInfoDataService.addUserData(
+        userCredential.user.uid
+      );
+
+      await this.taskListDataService.save(
+        { id: userInfo.todoListId, name: 'Default' },
+        userCredential.user.uid
+      );
+    }
+  }
+
   signIn() {
     this.auth
       .signInWithEmailAndPassword('email', 'password')

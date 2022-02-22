@@ -5,5 +5,7 @@
 
 # ... except for these.
 !.gitignore
-!/firebase-config-emulator-demo.ts
-!/firebase-config-interface.ts
+!/firebase.json
+!/firestore.indexes.json
+!/firestore.rules
+!/package.json
