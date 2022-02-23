@@ -2,6 +2,7 @@
   <mat-card class="shipping-card">
     <mat-card-actions>
       <button
+        data-test="sign-up-button"
         mat-raised-button
         color="primary"
         type="submit"
@@ -20,6 +21,7 @@
           <mat-form-field class="full-width">
             <input
               matInput
+              data-test="username-field"              
               id="username"
               placeholder="User Name"
               formControlName="username"
@@ -37,6 +39,7 @@
           <mat-form-field class="full-width">
             <input
               matInput
+              data-test="password-field"              
               type="password"
               id="password"
               placeholder="Password"

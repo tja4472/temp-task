@@ -14,19 +14,17 @@
 // ***********************************************************
 import './commands';
 
-/*
-// in cypress/support/index.ts
-// load type definitions that come with Cypress module
-/// <reference types="cypress" />
-*/
 declare global {
   namespace Cypress {
-    interface Chainable<Subject> {
-      /**
-       * Custom command to select DOM element by data-cy attribute.
-       * @example cy.dataCy('greeting')
-       */
-      dataCy(value: string): Chainable<JQuery<HTMLElement>>;
+    interface Chainable {
+      getBySel(
+        dataTestAttribute: string,
+        args?: any
+      ): Chainable<JQuery<HTMLElement>>;
+      getBySelLike(
+        dataTestPrefixAttribute: string,
+        args?: any
+      ): Chainable<JQuery<HTMLElement>>;
     }
   }
 }

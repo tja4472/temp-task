@@ -1,4 +1,5 @@
 <app-task-list-list
+  data-test="task-lists-page"
   [currentTasks]="taskLists$ | async"
   (newCurrentTask)="viewNewCurrentTask()"
 >

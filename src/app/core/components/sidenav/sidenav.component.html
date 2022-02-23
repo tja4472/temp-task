@@ -31,8 +31,10 @@
     <mat-nav-list>
       <a
         mat-list-item
-        *ngFor="let item of viewNavigation"
-        [routerLink]="[item.link]"
+
+        *ngFor="let item of viewNavigation" 
+        [routerLink]="[item.link]" 
+        [attr.data-test]="[item.testId]"        
       >
         {{ item.label }}
       </a>

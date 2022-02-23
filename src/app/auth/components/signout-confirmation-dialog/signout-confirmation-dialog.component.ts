@@ -9,8 +9,12 @@ import { Component } from '@angular/core';
     <h2 mat-dialog-title>Signout</h2>
     <mat-dialog-content>Are you sure you want to signout?</mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button [mat-dialog-close]="false">Cancel</button>
-      <button mat-button [mat-dialog-close]="true">OK</button>
+      <button mat-button data-test="cancel-button" [mat-dialog-close]="false">
+        Cancel
+      </button>
+      <button mat-button data-test="ok-button" [mat-dialog-close]="true">
+        OK
+      </button>
     </mat-dialog-actions>
   `,
   styles: [

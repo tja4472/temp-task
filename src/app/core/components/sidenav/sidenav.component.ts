@@ -19,6 +19,11 @@ import {
 
 import { SidenavActions } from './actions';
 
+type ViewNavigationItem = {
+  label: string;
+  link: string;
+  testId: string;
+};
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
@@ -34,22 +39,33 @@ export class SidenavComponent {
       shareReplay()
     );
 
-  viewNavigation = [
-    { link: pathPrefix + routeNames.home.path, label: 'Home Page' },
-    { link: pathPrefix + routeNames.signIn.path, label: 'Sign In' },
+  viewNavigation: ViewNavigationItem[] = [
+    { link: pathPrefix + routeNames.home.path, label: 'Home Page', testId: '' },
+    {
+      link: pathPrefix + routeNames.signIn.path,
+      label: 'Sign In',
+      testId: 'sidenav-sign-in',
+    },
     {
       link: pathPrefix + routeNames.signInComponentStore.path,
       label: 'Sign In(ComponentStore)',
+      testId: 'sidenav-sign-in-component-store',
     },
     {
       link: pathPrefix + routeNames.currentTasks.path,
       label: 'Current Tasks Page',
+      testId: 'sidenav-current-tasks',
     },
     {
       link: pathPrefix + routeNames.completedTasks.path,
       label: 'Completed Tasks Page',
+      testId: 'sidenav-completed-tasks',
     },
-    { link: pathPrefix + routeNames.taskLists.path, label: 'Task Lists Page' },
+    {
+      link: pathPrefix + routeNames.taskLists.path,
+      label: 'Task Lists Page',
+      testId: 'sidenav-task-lists',
+    },
   ];
 
   view$: Observable<{ user: User; taskListId: string | null } | null>;

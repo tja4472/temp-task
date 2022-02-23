@@ -2,6 +2,7 @@
   <mat-card class="shipping-card">
     <mat-card-actions>
       <button
+        data-test="sign-in-button"
         mat-raised-button
         color="primary"
         type="submit"
@@ -10,6 +11,7 @@
         Sign In
       </button>
       <button
+        data-test="sign-up-button"
         mat-raised-button
         color="accent"
         type="button"
@@ -28,6 +30,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <input
+              data-test="username-field"
               matInput
               id="username"
               data-testid="username"
@@ -47,6 +50,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <input
+              data-test="password-field"
               matInput
               type="password"
               id="password"

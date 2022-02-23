@@ -4,7 +4,7 @@
     cdkDragLockAxis="y"
     *ngFor="let task of currentTasks; trackBy: viewTrackBy"
   >
-    <div class="list-item">
+    <div class="list-item" data-test="list-item">
       <mat-checkbox
         [checked]="task.isComplete"
         (change)="toggleCompleteItem.emit(task)"
@@ -12,7 +12,7 @@
 
       <a [routerLink]="[editPath(), task.id]">
         <div class="middle" [ngClass]="{ 'line-through': task.isComplete }">
-          <div class="name">{{ task.name }}</div>
+          <div class="name" data-test="item-name"> {{ task.name }}</div>
           <div class="description">{{ task.description }}</div>
         </div>
       </a>
@@ -24,6 +24,6 @@
   </div>
 </div>
 
-<button mat-fab class="fab-bottom-right" (click)="newCurrentTask.emit()">
+<button data-test="new-task-fab" mat-fab class="fab-bottom-right" (click)="newCurrentTask.emit()">
   <mat-icon>add</mat-icon>
 </button>
