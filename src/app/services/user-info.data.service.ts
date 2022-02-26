@@ -3,11 +3,13 @@ import { Injectable } from '@angular/core';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { firstValueFrom, Observable } from 'rxjs';
+import { first, map, take } from 'rxjs/operators';
 
 import { EnvironmentService } from '@app/core/environment.service';
 import { newUserInfo, UserInfo } from '@app/models/user-info.model';
+
+import { TaskListDataService } from '@app/services/task-list.data.service';
 
 /*
 const APP_KEY = 'apps/' + environment.appCode;
@@ -50,7 +52,8 @@ export class UserInfoDataService {
 
   constructor(
     public readonly afs: AngularFirestore,
-    public readonly environmentService: EnvironmentService
+    public readonly environmentService: EnvironmentService,
+    private taskListDataService: TaskListDataService,    
   ) {
     console.log('UserInfoDataService:constructor');
     /*
@@ -85,7 +88,7 @@ export class UserInfoDataService {
     await this.save(defaultValue, userId);
     return defaultValue;
   }
-  
+
   /*
   public getSingleItem$(userId: string) {
     const doc = this.getItem$(userId)
@@ -108,6 +111,38 @@ export class UserInfoDataService {
     return from(doc);
   }
   */
+
+  /**
+   *
+   * @param userId
+   * @returns
+   */
+  public getOrCreateUserInfo(userId: string): Promise<UserInfo> {
+    //
+
+   return new Promise<UserInfo>((resolve) => {
+      firstValueFrom(this.firestoreDocument(userId).get()).then(async (documentSnapshot)=>{
+        const firestoreDoc = documentSnapshot.data();
+
+        if (firestoreDoc == undefined) {
+            const userInfo = await this.addUserData(
+              userId
+            );
+     
+            this.taskListDataService.save(
+              { id: userInfo.todoListId, name: 'Default' },
+              userId
+            );
+            
+                   
+          resolve(userInfo);
+        }  else {
+
+        resolve(fromFirestoreDoc(firestoreDoc));
+        }
+      });
+    });
+  }
 
   // Need to throw error if doc is undefined.
   public getItem$(userId: string): Observable<UserInfo> {

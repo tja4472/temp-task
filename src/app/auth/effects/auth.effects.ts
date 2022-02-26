@@ -7,13 +7,14 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 
-import { from, of } from 'rxjs';
+import { merge, of } from 'rxjs';
 import {
   concatMap,
   exhaustMap,
   filter,
   first,
   map,
+  share,
   skip,
   switchMap,
   tap,
@@ -59,12 +60,98 @@ effectDispatchFalse$ = createEffect(
 
 @Injectable()
 export class AuthEffects implements OnInitEffects {
+  /*  
+  aaaa_userSignIn$ = createEffect(
+    () => {
+      var firstResult = true;
+      return this.actions$.pipe(
+        ofType(AuthApiActions.autoSignInCheck),
+        tap(() => console.log('>>>>aaaa_firebaseSignIn$')),
+        switchMap(() =>
+          this.authService.appUser$.pipe(
+            tap((appUser) => {
+              console.log('~~appUser>', appUser);
+              console.log('~~firstCall>', firstResult);
+              if (firstResult) {
+                // With enablePersistence the first result will be from
+                // the autoSignIn.
+                firstResult = false;
+                console.log('isAutoSign = true');
+
+                if (appUser) {
+                  console.log('[Auth/API] Sign In - Have User');
+                } else {
+                  console.log('[Auth/API] Sign In - No User');
+                }
+              } else {
+                console.log('isAutoSign = false');
+
+                if (appUser) {
+                  console.log('[Auth/API] Sign In - Have User');
+                } else {
+                  console.log('[Auth/API] Sign In - No User');
+                }
+              }
+            })
+          )
+        )
+      );
+    },
+    { dispatch: false }
+  );
+*/
+
+  abbb_userSignIn$ = createEffect(() => {
+    var firstResult = true;
+    return this.actions$.pipe(
+      ofType(AuthApiActions.autoSignInCheck),
+      tap(() => console.log('>>>>abbb_userSignIn$')),
+      switchMap(() => {
+        // With enablePersistence the first result will be from
+        // the autoSignIn.
+        const sharedAppUser$ = this.authService.appUser$.pipe(share());
+        const first$ = sharedAppUser$.pipe(
+          first(),
+          tap(() => console.log('FIRST')),
+          map((appUser) => {
+            if (appUser) {
+              return AuthApiActions.signInHaveUser({
+                appUser,
+                isAutoSignIn: true,
+              });
+            } else {
+              return AuthApiActions.signInNoUser({ isAutoSignIn: true });
+            }
+          })
+        );
+
+        const other$ = sharedAppUser$.pipe(
+          skip(1),
+          tap(() => console.log('SKIP')),
+          map((appUser) => {
+            if (appUser) {
+              return AuthApiActions.signInHaveUser({
+                appUser,
+                isAutoSignIn: false,
+              });
+            } else {
+              return AuthApiActions.signInNoUser({ isAutoSignIn: false });
+            }
+          })
+        );
+
+        return merge(first$, other$);
+      })
+    );
+  });
+  /*  
   // With enablePersistence the first result will be from
   // the autoSignIn.
   //#region Sign In
   bbbautoSignInNoUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthApiActions.autoSignInCheck),
+      tap(() => console.log('>>>>bbbautoSignInNoUser$')),
       switchMap(() =>
         this.authService.appUser$.pipe(
           first(),
@@ -80,6 +167,7 @@ export class AuthEffects implements OnInitEffects {
   bbbautoSignInHaveUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthApiActions.autoSignInCheck),
+      tap(() => console.log('>>>>bbbautoSignInHaveUser$')),
       switchMap(() =>
         this.authService.appUser$.pipe(
           first(),
@@ -100,6 +188,7 @@ export class AuthEffects implements OnInitEffects {
   bbbsignInNoUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthApiActions.autoSignInCheck),
+      tap(() => console.log('>>>>bbbsignInNoUser$')),
       switchMap(() =>
         this.authService.appUser$.pipe(
           skip(1),
@@ -115,6 +204,7 @@ export class AuthEffects implements OnInitEffects {
   bbbsignInHaveUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AuthApiActions.autoSignInCheck),
+      tap(() => console.log('>>>>bbbsignInHaveUser$')),
       switchMap(() =>
         this.authService.appUser$.pipe(
           skip(1),
@@ -132,7 +222,7 @@ export class AuthEffects implements OnInitEffects {
     );
   });
   //#endregion
-
+*/
   // Watch userId and perform operations on change.
   aaAAAAA$ = createEffect(
     () => {

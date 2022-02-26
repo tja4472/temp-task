@@ -2,13 +2,23 @@ import { Injectable } from '@angular/core';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
-import { from, Observable, of } from 'rxjs';
-import { first, map, switchMap } from 'rxjs/operators';
+import {
+  firstValueFrom,
+  from,
+  merge,
+  Observable,
+  of,
+  OperatorFunction,
+  partition,
+} from 'rxjs';
+import { filter, first, map, share, switchMap, tap } from 'rxjs/operators';
 
 import { UserInfoDataService } from '@app/services/user-info.data.service';
 
 import { AppUser } from '../models/app-user.model';
 import { TaskListDataService } from '@app/services/task-list.data.service';
+
+import firebase from 'firebase/compat/app';
 
 // https://benjaminjohnson.me/blog/typesafe-errors-in-typescript
 type ResultSuccess<T> = { type: 'success'; value: T };
@@ -23,23 +33,85 @@ type Result<T> = ResultSuccess<T> | ResultError;
 export class AuthService {
   public redirectUrl = '';
 
-  appUser$: Observable<AppUser | null>;
+  appUser$: Observable<AppUser | null> = this.createAppUser$();
 
   constructor(
     private readonly auth: AngularFireAuth,
-    private taskListDataService: TaskListDataService,
     private userInfoDataService: UserInfoDataService
   ) {
-    this.appUser$ = this.auth.user.pipe(
-      switchMap((user) => {
-        if (user === null) {
+    const [null$, user$] = partition(
+      this.auth.user,
+      (value, index) => value === null
+    );
+
+    const aa$ = null$ as Observable<null>;
+    const bb$ = user$ as Observable<firebase.User>;
+    const cc$ = merge(aa$, bb$);
+
+    const q$ = user$.pipe(
+      filter((x) => x !== null) as OperatorFunction<
+        firebase.User | null,
+        firebase.User
+      >
+    );
+
+    /*    
+    const a$ = user$.pipe(
+      switchMap((firebaseUser) => {
+        if (firebaseUser === null) {
           return of(null);
-        } else {
+        }
+
+        return from(this.userInfoDataService.getOrCreateUserInfo(firebaseUser.uid)).pipe(
+          first(),
+          map((userInfo) => {
+            const result: AppUser = {
+              taskListId: userInfo.todoListId,
+              uid: firebaseUser.uid,
+              email: firebaseUser.email??'',
+            };
+            return result;            
+          })
+        );
+      })
+    );
+*/
+/*
+    this.appUser$ = this.auth.user.pipe(
+      switchMap((firebaseUser) => {
+        if (firebaseUser === null) {
+          return of(null);
+        }
+
+        return from(
+          this.userInfoDataService.getOrCreateUserInfo(firebaseUser.uid)
+        ).pipe(
+          first(),
+          map((userInfo) => {
+            const result: AppUser = {
+              taskListId: userInfo.todoListId,
+              uid: firebaseUser.uid,
+              email: firebaseUser.email ?? '',
+            };
+            return result;
+          })
+        );
+      })
+    );
+*/
+    // this.appUser$ = this.auth.user.pipe(
+
+    /*          
           return this.userInfoDataService.getItem$(user.uid).pipe(
             // Stop listening for changes.
             first(),
             map((userInfo) => {
+              // User may have been added to Firebase elsewhere.
+              // So userInfo will not exist.
+   
               if (user.email === null) {
+
+
                 throw new Error('user.email is null');
               }
               const result: AppUser = {
@@ -50,9 +122,7 @@ export class AuthService {
               return result;
             })
           );
-        }
-      })
-    );
+*/
   }
   /*
       this.store.dispatch(
@@ -64,6 +134,63 @@ export class AuthService {
         })
       )
 */
+createAppUserzzzzz$(): Observable<AppUser | null> {
+  return this.auth.user.pipe(
+    switchMap((firebaseUser) => {
+      if (firebaseUser === null) {
+        return of(null);
+      }
+
+      return from(
+        this.userInfoDataService.getOrCreateUserInfo(firebaseUser.uid)
+      ).pipe(
+        first(),
+        map((userInfo) => {
+          const result: AppUser = {
+            taskListId: userInfo.todoListId,
+            uid: firebaseUser.uid,
+            email: firebaseUser.email ?? '',
+          };
+          return result;
+        })
+      );
+    })
+  );
+}
+
+createAppUser$(): Observable<AppUser | null> {
+  return this.firebaseUser$().pipe(
+    switchMap((firebaseUser) => {
+      if (firebaseUser === null) {
+        return of(null);
+      }
+
+      return from(
+        this.userInfoDataService.getOrCreateUserInfo(firebaseUser.uid)
+      ).pipe(
+        first(),
+        map((userInfo) => {
+          const result: AppUser = {
+            taskListId: userInfo.todoListId,
+            uid: firebaseUser.uid,
+            email: firebaseUser.email ?? '',
+          };
+          return result;
+        })
+      );
+    })
+  );
+}
+
+public firebaseUser$(): Observable<null | firebase.User> {
+  // Added so can be mocked in tests.
+  return this.auth.user;
+}
+
+public testy() {
+  return 'fred';
+}
+
   public async addUserData(userId: string) {
     await this.userInfoDataService.addUserData(userId);
   }
@@ -73,6 +200,7 @@ export class AuthService {
       email,
       password
     );
+    /*    
     if (userCredential.user) {
       const userInfo = await this.userInfoDataService.addUserData(
         userCredential.user.uid
@@ -83,6 +211,7 @@ export class AuthService {
         userCredential.user.uid
       );
     }
+*/
   }
 
   signIn() {
