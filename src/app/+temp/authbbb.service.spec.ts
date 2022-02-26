@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 import { merge, Observable, of, partition, switchMap } from 'rxjs';
 
-import { AuthService } from './auth.service';
+import { AuthService } from '@app/auth/services/auth.service';
 import { UserInfoDataService } from '@app/services/user-info.data.service';
 
 import { UserInfo } from '@app/models/user-info.model';
@@ -34,15 +34,9 @@ describe('AuthService', () => {
       });
 
       angularFireAuth = TestBed.inject(AngularFireAuth);
-      // jest.spyOn(angularFireAuth, 'user','set').mockReturnValue(of(null));      
       userInfoDataService = TestBed.inject(UserInfoDataService);
 
       authService = TestBed.inject(AuthService);
-
-      const a:Partial<firebase.User>= { uid: 'UIDa', email: 'EMAIL' };
-
-      // jest.spyOn(authService, 'firebaseUser$').mockReturnValue(of(null));      
-
     });
 
     it('should be created', () => {
@@ -68,8 +62,6 @@ describe('AuthService', () => {
   });
 
   describe('non null user', () => {
-
-
     const AngularFireAuthStub = {
       user: of({ uid: 'UID', email: 'EMAIL' }),
     };
@@ -79,7 +71,7 @@ describe('AuthService', () => {
         return new Promise<UserInfo>((resolve) => {
           resolve({ todoListId: 'TODO_LIST_ID' });
         });
-      },     
+      },
     };
 
     let angularFireAuth: AngularFireAuth;
@@ -100,8 +92,6 @@ describe('AuthService', () => {
       userInfoDataService = TestBed.inject(UserInfoDataService);
 
       authService = TestBed.inject(AuthService);
-
-
     });
 
     it('should be created', () => {
@@ -128,64 +118,8 @@ describe('AuthService', () => {
         });
       })();
     });
-
-    it('test testy', () => {
-      expect(authService.testy()).toEqual('fred');
-    });   
-    
-    it('test testy with spyOn', () => {
-      jest.spyOn(authService, 'testy').mockImplementation(()=>'Hello');
-      expect(authService.testy()).toEqual('Hello');
-    });  
-    
-    it('null spyOn', () => {
-      jest.spyOn(authService, 'firebaseUser$').mockImplementation(()=>of(null));
-      expect(authService.testy()).toEqual('fred');
-    });     
-
-    it('appUser$ should be null spyOn', (done) => {
-      jest.spyOn(authService, 'firebaseUser$').mockImplementation(()=>of(null));
-
-      (async () => {
-        const a$ = authService.createAppUser$();
-
-        a$.subscribe((s) => {
-          try {
-            expect(s).toBeNull();
-            done();
-          } catch (error) {
-            done(error);
-          }
-        });
-      })();
-    }); 
-    
-    it('appUser$ should have value spyOn', (done) => {
-      const a:Partial<firebase.User>= { uid: 'UIDa', email: 'EMAIL' };
-
-      jest.spyOn(authService, 'firebaseUser$').mockReturnValue(of(a as any));
-      jest.spyOn(userInfoDataService, 'getOrCreateUserInfo').mockReturnValue(Promise.resolve({ todoListId: 'TODO_LIST_IDa' }));
-
-      (async () => {
-        const a$ = authService.createAppUser$();
-
-        a$.subscribe((s) => {
-          try {
-            expect(s).toEqual({
-              email: 'EMAIL',
-              taskListId: 'TODO_LIST_IDa',
-              uid: 'UIDa',
-            });
-            done();
-          } catch (error) {
-            done(error);
-          }
-        });
-      })();
-    });    
   });
 });
-
 
 describe('Test2', () => {
   it('xxxx', (done) => {

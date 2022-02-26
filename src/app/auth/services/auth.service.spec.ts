@@ -12,42 +12,51 @@ import { UserInfo } from '@app/models/user-info.model';
 import firebase from 'firebase/compat/app';
 
 describe('AuthService', () => {
-  describe('null user', () => {
-    const AngularFireAuthStub = {
-      user: of(null),
-    };
+  const AngularFireAuthStub = {
+    user: of(null),
+  };
 
-    const UserInfoDataServiceStub = {};
-
-    let angularFireAuth: AngularFireAuth;
-    let authService: AuthService;
-    let userInfoDataService: UserInfoDataService;
-
-    beforeEach(() => {
-      TestBed.configureTestingModule({
-        // Provide both the service-to-test and its dependencies.
-        providers: [
-          AuthService,
-          { provide: UserInfoDataService, useValue: UserInfoDataServiceStub },
-          { provide: AngularFireAuth, useValue: AngularFireAuthStub },
-        ],
+  const UserInfoDataServiceStub = {
+    getOrCreateUserInfo(userId: string): Promise<UserInfo> {
+      return new Promise<UserInfo>((resolve) => {
+        resolve({ todoListId: 'TODO_LIST_ID_DUMMY' });
       });
+    },
+  };
 
-      angularFireAuth = TestBed.inject(AngularFireAuth);
-      userInfoDataService = TestBed.inject(UserInfoDataService);
+  let angularFireAuth: AngularFireAuth;
+  let authService: AuthService;
+  let userInfoDataService: UserInfoDataService;
 
-      authService = TestBed.inject(AuthService);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      // Provide both the service-to-test and its dependencies.
+      providers: [
+        AuthService,
+        { provide: AngularFireAuth, useValue: AngularFireAuthStub },
+        { provide: UserInfoDataService, useValue: UserInfoDataServiceStub },
+      ],
     });
 
-    it('should be created', () => {
-      expect(angularFireAuth).toBeTruthy();
-      expect(authService).toBeTruthy();
-      expect(userInfoDataService).toBeTruthy();
-    });
+    authService = TestBed.inject(AuthService);
+    angularFireAuth = TestBed.inject(AngularFireAuth);
+    userInfoDataService = TestBed.inject(UserInfoDataService);
+  });
 
-    it('appUser$ should be null', (done) => {
+  it('should be created', () => {
+    expect(angularFireAuth).toBeTruthy();
+    expect(authService).toBeTruthy();
+    expect(userInfoDataService).toBeTruthy();
+  });
+
+  describe('createAppUser$', () => {
+    // Test method not property.
+    // const a$ = authService.appUser$;
+    it('should be null if firebase user null', (done) => {
+      jest.spyOn(authService, 'firebaseUser$').mockReturnValue(of(null));
+
       (async () => {
-        const a$ = authService.appUser$;
+        const a$ = authService.createAppUser$();
 
         a$.subscribe((s) => {
           try {
@@ -59,59 +68,24 @@ describe('AuthService', () => {
         });
       })();
     });
-  });
 
-  describe('non null user', () => {
+    it('should have value if firebase user not null', (done) => {
+      const a: Partial<firebase.User> = { uid: 'UIDa', email: 'EMAILa' };
 
+      jest.spyOn(authService, 'firebaseUser$').mockReturnValue(of(a as any));
+      jest
+        .spyOn(userInfoDataService, 'getOrCreateUserInfo')
+        .mockResolvedValue({ todoListId: 'TODO_LIST_IDa' });
 
-    const AngularFireAuthStub = {
-      user: of({ uid: 'UID', email: 'EMAIL' }),
-    };
-
-    const UserInfoDataServiceStub = {
-      getOrCreateUserInfo(userId: string): Promise<UserInfo> {
-        return new Promise<UserInfo>((resolve) => {
-          resolve({ todoListId: 'TODO_LIST_ID' });
-        });
-      },
-    };
-
-    let angularFireAuth: AngularFireAuth;
-    let authService: AuthService;
-    let userInfoDataService: UserInfoDataService;
-
-    beforeEach(() => {
-      TestBed.configureTestingModule({
-        // Provide both the service-to-test and its dependencies.
-        providers: [
-          AuthService,
-          { provide: UserInfoDataService, useValue: UserInfoDataServiceStub },
-          { provide: AngularFireAuth, useValue: AngularFireAuthStub },
-        ],
-      });
-
-      angularFireAuth = TestBed.inject(AngularFireAuth);
-      userInfoDataService = TestBed.inject(UserInfoDataService);
-
-      authService = TestBed.inject(AuthService);
-    });
-
-    it('should be created', () => {
-      expect(angularFireAuth).toBeTruthy();
-      expect(authService).toBeTruthy();
-      expect(userInfoDataService).toBeTruthy();
-    });
-
-    it('appUser$ should have value', (done) => {
       (async () => {
-        const a$ = authService.appUser$;
+        const a$ = authService.createAppUser$();
 
         a$.subscribe((s) => {
           try {
             expect(s).toEqual({
-              email: 'EMAIL',
-              taskListId: 'TODO_LIST_ID',
-              uid: 'UID',
+              email: 'EMAILa',
+              taskListId: 'TODO_LIST_IDa',
+              uid: 'UIDa',
             });
             done();
           } catch (error) {
@@ -120,116 +94,5 @@ describe('AuthService', () => {
         });
       })();
     });
-
-    it('test testy', () => {
-      expect(authService.testy()).toEqual('fred');
-    });   
-    
-    it('test testy with spyOn', () => {
-      jest.spyOn(authService, 'testy').mockImplementation(()=>'Hello');
-      expect(authService.testy()).toEqual('Hello');
-    });      
-  });
-});
-
-
-describe('Test2', () => {
-  it('xxxx', (done) => {
-    (async () => {
-      const source$ = of('aaa');
-
-      const a$ = source$.pipe(
-        switchMap((user) => {
-          return of(null);
-        })
-      );
-
-      a$.subscribe((s) => {
-        try {
-          expect(s).toBeNull();
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
-    })();
-  });
-
-  it('xxxx1', (done) => {
-    (async () => {
-      const source$ = of('aaa');
-
-      const [null$, nonNull$] = partition(
-        source$,
-        (value, index) => value === null
-      );
-
-      null$.subscribe((s) => {
-        try {
-          expect(s).toBeNull();
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
-
-      nonNull$.subscribe((s) => {
-        try {
-          expect(s).toEqual('aaa');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
-
-      merge(nonNull$, null$).subscribe((s) => {
-        try {
-          expect(s).toEqual('aaa');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
-    })();
-  });
-
-  it('xxxx2', (done) => {
-    (async () => {
-      const source$ = of('aaa');
-
-      const [null$, nonNull$] = partition(
-        source$,
-        (value, index) => value === null
-      );
-
-      merge(nonNull$, null$).subscribe((s) => {
-        try {
-          expect(s).toEqual('aaa');
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
-    })();
-  });
-
-  it('xxxx3', (done) => {
-    (async () => {
-      const source$ = of(null);
-
-      const [null$, nonNull$] = partition(
-        source$,
-        (value, index) => value === null
-      );
-
-      merge(nonNull$, null$).subscribe((s) => {
-        try {
-          expect(s).toBeNull();
-          done();
-        } catch (error) {
-          done(error);
-        }
-      });
-    })();
   });
 });
