@@ -16,10 +16,12 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./task-lists-root.component.css'],
 })
 export class TaskListsRootComponent implements OnDestroy, OnInit {
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {
     // this.store.dispatch(TaskListsRootActions.destroyed());
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {}
 
   constructor(private store: Store<{}>) {}

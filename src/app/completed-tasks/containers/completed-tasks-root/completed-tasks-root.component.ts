@@ -20,6 +20,7 @@ export class CompletedTasksRootComponent implements OnDestroy, OnInit {
     this.store.dispatch(CompletedTasksRootActions.destroyed());
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {}
 
   constructor(private store: Store<{}>) {}

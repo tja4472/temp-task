@@ -22,6 +22,7 @@ export class TaskListDetailEditPageComponent implements OnInit {
     this.task$ = store.pipe(select(TaskSelectors.selectTaskListFromRoute));
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit() {}
 
   viewCancelled(taskList: TaskListListItem): void {

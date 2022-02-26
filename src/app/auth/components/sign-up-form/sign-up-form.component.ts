@@ -35,6 +35,7 @@ export class SignUpFormComponent implements OnInit {
     this.presenter.init();
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit() {}
 
   viewOnSubmit() {

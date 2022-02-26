@@ -76,7 +76,7 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
-            },            
+            },
             "emulator-demo": {
               "fileReplacements": [
                 {
@@ -89,8 +89,8 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true            
-            }            
+              "namedChunks": true
+            }
           },
           "defaultConfiguration": "production"
         },
@@ -105,12 +105,12 @@
             },
             "development": {
               "browserTarget": "ng-task:build:development"
-            },            
+            },
             "emulator-demo": {
               "browserTarget": "ng-task:build:emulator-demo"
-            }            
+            }
           },
-          "defaultConfiguration": "development"          
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -152,12 +152,21 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {}
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
   "defaultProject": "ng-task",
   "cli": {
-    "defaultCollection": "@ngrx/schematics"
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }

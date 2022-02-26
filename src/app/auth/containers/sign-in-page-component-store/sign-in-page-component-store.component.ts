@@ -42,6 +42,7 @@ export class SignInPageComponentStoreComponent implements OnInit {
     // this.store.dispatch(SignInPageActions.entered());
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit() {}
 
   onSubmitted(credentials: Credentials) {

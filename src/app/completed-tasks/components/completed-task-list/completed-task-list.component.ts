@@ -75,6 +75,7 @@ export class CompletedTaskListComponent implements OnInit {
     return result;
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit() {}
 
   viewTrackBy(index: number, item: CompletedTask) {

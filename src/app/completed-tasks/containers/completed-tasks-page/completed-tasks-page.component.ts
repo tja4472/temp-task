@@ -36,10 +36,12 @@ export class CompletedTasksPageComponent implements OnDestroy, OnInit {
     );
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {
     // this.store.dispatch(CompletedTasksPageActions.destroyed());
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit() {
     // this.store.dispatch(CompletedTasksPageActions.entered());
   }

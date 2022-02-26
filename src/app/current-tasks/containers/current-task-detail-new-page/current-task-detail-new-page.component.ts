@@ -19,6 +19,7 @@ export class CurrentTaskDetailNewPageComponent implements OnInit {
 
   constructor(private store: Store<{}>) {}
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit() {}
 
   viewCancelled(todo: CurrentTask): void {
