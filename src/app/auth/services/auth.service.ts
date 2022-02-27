@@ -92,6 +92,17 @@ export class AuthService {
 */
   }
 
+  public signInWithEmailAndPassword(
+    email: string,
+    password: string
+  ): Promise<firebase.auth.UserCredential> {
+    return this.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  public signOut(): Promise<void> {
+    return this.auth.signOut();
+  }
+
   signIn() {
     this.auth
       .signInWithEmailAndPassword('email', 'password')

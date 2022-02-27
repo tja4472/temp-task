@@ -218,7 +218,7 @@ export class AuthEffects implements OnInitEffects {
         tap((action) => {
           // const password = 'aaaaa';
           const password = action.credentials.password;
-          this.afAuth
+          this.authService
             .signInWithEmailAndPassword(action.credentials.username, password)
             .catch((error) =>
               this.store.dispatch(
@@ -291,7 +291,7 @@ export class AuthEffects implements OnInitEffects {
       return this.actions$.pipe(
         ofType(AuthActions.signOut),
         tap(() =>
-          this.afAuth.signOut().then(() => {
+          this.authService.signOut().then(() => {
             this.router.navigate(['/sign-in']);
             this.store.dispatch(AuthActions.signOutComplete());
           })
@@ -367,7 +367,6 @@ export class AuthEffects implements OnInitEffects {
 
   constructor(
     private actions$: Actions,
-    private afAuth: AngularFireAuth,
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
