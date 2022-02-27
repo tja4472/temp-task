@@ -52,7 +52,7 @@ describe('AuthService', () => {
 
     it('appUser$ should be null', (done) => {
       (async () => {
-        const a$ = authService.appUser$;
+        const a$ = authService.zzzappUser$;
 
         a$.subscribe((s) => {
           try {
@@ -107,7 +107,7 @@ describe('AuthService', () => {
 
     it('appUser$ should have value', (done) => {
       (async () => {
-        const a$ = authService.appUser$;
+        const a$ = authService.zzzappUser$;
 
         a$.subscribe((s) => {
           try {

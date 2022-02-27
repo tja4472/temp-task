@@ -60,48 +60,7 @@ effectDispatchFalse$ = createEffect(
 
 @Injectable()
 export class AuthEffects implements OnInitEffects {
-  /*  
-  aaaa_userSignIn$ = createEffect(
-    () => {
-      var firstResult = true;
-      return this.actions$.pipe(
-        ofType(AuthApiActions.autoSignInCheck),
-        tap(() => console.log('>>>>aaaa_firebaseSignIn$')),
-        switchMap(() =>
-          this.authService.appUser$.pipe(
-            tap((appUser) => {
-              console.log('~~appUser>', appUser);
-              console.log('~~firstCall>', firstResult);
-              if (firstResult) {
-                // With enablePersistence the first result will be from
-                // the autoSignIn.
-                firstResult = false;
-                console.log('isAutoSign = true');
-
-                if (appUser) {
-                  console.log('[Auth/API] Sign In - Have User');
-                } else {
-                  console.log('[Auth/API] Sign In - No User');
-                }
-              } else {
-                console.log('isAutoSign = false');
-
-                if (appUser) {
-                  console.log('[Auth/API] Sign In - Have User');
-                } else {
-                  console.log('[Auth/API] Sign In - No User');
-                }
-              }
-            })
-          )
-        )
-      );
-    },
-    { dispatch: false }
-  );
-*/
-
-  abbb_userSignIn$ = createEffect(() => {
+  appUser$ = createEffect(() => {
     var firstResult = true;
     return this.actions$.pipe(
       ofType(AuthApiActions.autoSignInCheck),
@@ -109,7 +68,7 @@ export class AuthEffects implements OnInitEffects {
       switchMap(() => {
         // With enablePersistence the first result will be from
         // the autoSignIn.
-        const sharedAppUser$ = this.authService.appUser$.pipe(share());
+        const sharedAppUser$ = this.authService.createAppUser$().pipe(share());
         const first$ = sharedAppUser$.pipe(
           first(),
           tap(() => console.log('FIRST')),
@@ -223,24 +182,6 @@ export class AuthEffects implements OnInitEffects {
   });
   //#endregion
 */
-  // Watch userId and perform operations on change.
-  aaAAAAA$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        // tap((action) => console.log('aaAAAAA$:action',action)),
-        ofType(AuthApiActions.autoSignInCheck),
-        tap((action) => console.log('aaAAAAA$:actionA', action)),
-        switchMap(() =>
-          this.store.select(selectUserId).pipe(
-            tap((userId) => console.log('aaAAAAA:userId>', userId)),
-            filter((userId) => userId !== null),
-            tap((userId) => console.log('aaAAAAA:Signed in userId>', userId))
-          )
-        )
-      );
-    },
-    { dispatch: false }
-  );
 
   /*
   manualSignIn$ = createEffect(() => {

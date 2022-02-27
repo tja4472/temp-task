@@ -24,7 +24,7 @@ type Result<T> = ResultSuccess<T> | ResultError;
 export class AuthService {
   public redirectUrl = '';
 
-  appUser$: Observable<AppUser | null> = this.createAppUser$();
+  zzzappUser$: Observable<AppUser | null> = this.createAppUser$();
 
   constructor(
     private readonly auth: AngularFireAuth,
