@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ApplicationRef, DoBootstrap, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -30,6 +30,14 @@ import { RootStoreModule } from './root-store';
       registrationStrategy: 'registerImmediately',
     }),
   ],
-  bootstrap: [AppComponent],
+  // bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule implements DoBootstrap {
+  ngDoBootstrap(appRef: ApplicationRef) { 
+    appRef.bootstrap(AppComponent);
+    if (window.Cypress) {
+      // and save the application reference
+      window.appRef = appRef;
+    }
+  }
+}

@@ -29,7 +29,11 @@ export class AuthService {
   constructor(
     private readonly auth: AngularFireAuth,
     private userInfoDataService: UserInfoDataService
-  ) {}
+  ) {
+    if (window.Cypress) {
+      window.AuthService = this;
+    }
+  }
   /*
       this.store.dispatch(
         AuthApiActions.signInFailure({
@@ -73,7 +77,11 @@ export class AuthService {
     await this.userInfoDataService.addUserData(userId);
   }
 
-  async signUp(email: string, password: string) {
+  signUp(email: string, password: string) {
+    return this.auth.createUserWithEmailAndPassword(email, password);
+  }
+
+  async signUp1(email: string, password: string) {
     const userCredential = await this.auth.createUserWithEmailAndPassword(
       email,
       password

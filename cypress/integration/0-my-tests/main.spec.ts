@@ -6,11 +6,11 @@ const user = {
 } as const;
 
 describe('test', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     // Runs before every test block
     cy.viewport('ipad-2', 'landscape');
-    await clearDatabase('demo-1');
-    await clearUserAccounts('demo-1');
+    cy.wrap(clearDatabase('demo-1'));
+    cy.wrap(clearUserAccounts('demo-1'));
   });
 
   it('main test', () => {
@@ -78,13 +78,10 @@ describe('test', () => {
     //
     // https://medium.com/slido-dev-blog/cypress-tips-4-testing-lists-of-items-dccd4b688816
     cy.getBySel('list-item').should('have.length', 2);
-    cy.getBySel('item-name').should('have.length', 2);    
-    cy.getBySel('list-item').then(items => {
-
-    });    
+    cy.getBySel('item-name').should('have.length', 2);
+    cy.getBySel('list-item').then((items) => {});
     cy.getBySel('item-name').eq(0).click();
-   
-    cy.location('pathname').should('match', /^\/tasks\/current\/edit/); 
 
+    cy.location('pathname').should('match', /^\/tasks\/current\/edit/);
   });
 });
