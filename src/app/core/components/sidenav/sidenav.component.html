@@ -7,12 +7,12 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar>
-      Menu
-    </mat-toolbar>
+    <mat-toolbar> Menu </mat-toolbar>
 
     <div *ngIf="view$ | async as view; else not_signed_in">
-      {{ view.user.email }}
+      <div data-test="user-name">
+        {{ view.user.email }}
+      </div>
 
       <mat-select
         (selectionChange)="viewtodoListsSelectChange($event)"
@@ -25,16 +25,15 @@
     </div>
 
     <ng-template #not_signed_in>
-      Not Signed In
+      <div data-test="user-name">Not Signed In</div>
     </ng-template>
 
     <mat-nav-list>
       <a
         mat-list-item
-
-        *ngFor="let item of viewNavigation" 
-        [routerLink]="[item.link]" 
-        [attr.data-test]="[item.testId]"        
+        *ngFor="let item of viewNavigation"
+        [routerLink]="[item.link]"
+        [attr.data-test]="[item.testId]"
       >
         {{ item.label }}
       </a>

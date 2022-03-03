@@ -2,12 +2,17 @@ import { clearDatabase, clearUserAccounts } from 'emulator/emulator-helpers';
 
 import * as AuthService from '../../support/auth.service';
 
-const user = {
+const userC = {
   email: 'c.c@c.com',
   password: 'password',
 } as const;
 
-describe('signup-and-in', () => {
+const userD = {
+  email: 'd.d@d.com',
+  password: 'helloWorld',
+} as const;
+
+describe.skip('signup-and-in', () => {
   beforeEach(() => {
     // Runs before every test block
     cy.viewport('ipad-2', 'landscape');
@@ -15,7 +20,7 @@ describe('signup-and-in', () => {
     cy.wrap(clearUserAccounts('demo-1'));
   });
 
-  it.skip('main test', () => {
+  it('main test', () => {
     // Home page
     cy.visit('/');
     cy.location('pathname').should('eq', '/home');
@@ -28,8 +33,8 @@ describe('signup-and-in', () => {
     // Sign Up page
     cy.location('pathname').should('eq', '/sign-up');
     cy.getBySel('sign-up-button').should('be.visible').and('be.disabled');
-    cy.getBySel('username-field').type(user.email);
-    cy.getBySel('password-field').type(user.password);
+    cy.getBySel('username-field').type(userC.email);
+    cy.getBySel('password-field').type(userC.password);
     cy.getBySel('sign-up-button').click();
     // Home page
     cy.location('pathname').should('eq', '/home');
@@ -40,36 +45,14 @@ describe('signup-and-in', () => {
     // Sign In page
     cy.location('pathname').should('eq', '/sign-in');
     cy.getBySel('sign-up-button').should('be.visible');
-    cy.getBySel('username-field').type(user.email);
-    cy.getBySel('password-field').type(user.password);
+    cy.getBySel('username-field').type(userC.email);
+    cy.getBySel('password-field').type(userC.password);
     cy.getBySel('sign-in-button').click();
     // Home page
     cy.location('pathname').should('eq', '/home');
   });
 
-  it('AuthService.signUp', () => {
-    // Home page
-    cy.visit('/');
-    AuthService.getService();
-    AuthService.signUp('d@d.d.com', 'helloWorld');
-    /*
-    // https://github.com/prescottprue/cypress-firebase/issues/14#issuecomment-744167897
-    // createuser
-
-    // Current Tasks page
-    cy.visit('/tasks/current');
-    // Sign In page
-    cy.location('pathname').should('eq', '/sign-in');
-    cy.getBySel('sign-up-button').should('be.visible');
-    cy.getBySel('username-field').type(user.email);
-    cy.getBySel('password-field').type(user.password);
-    cy.getBySel('sign-in-button').click();
-    // Current Tasks page
-    cy.location('pathname').should('eq', '/tasks/current');
-*/
-  });
-
-  it.skip('redirect', () => {
+  it('redirect', () => {
     // cy.login('test-login');
     // Home page
     cy.visit('/');
@@ -84,8 +67,8 @@ describe('signup-and-in', () => {
     // Sign Up page
     cy.location('pathname').should('eq', '/sign-up');
     cy.getBySel('sign-up-button').should('be.visible').and('be.disabled');
-    cy.getBySel('username-field').type(user.email);
-    cy.getBySel('password-field').type(user.password);
+    cy.getBySel('username-field').type(userC.email);
+    cy.getBySel('password-field').type(userC.password);
     cy.getBySel('sign-up-button').click();
     // Home page
     cy.location('pathname').should('eq', '/home');
@@ -96,8 +79,8 @@ describe('signup-and-in', () => {
     // Sign In page
     cy.location('pathname').should('eq', '/sign-in');
     cy.getBySel('sign-up-button').should('be.visible');
-    cy.getBySel('username-field').type(user.email);
-    cy.getBySel('password-field').type(user.password);
+    cy.getBySel('username-field').type(userC.email);
+    cy.getBySel('password-field').type(userC.password);
     cy.getBySel('sign-in-button').click();
     // Home page
     cy.location('pathname').should('eq', '/home');
@@ -112,8 +95,8 @@ describe('signup-and-in', () => {
     // Sign In page
     cy.location('pathname').should('eq', '/sign-in');
     cy.getBySel('sign-up-button').should('be.visible');
-    cy.getBySel('username-field').type(user.email);
-    cy.getBySel('password-field').type(user.password);
+    cy.getBySel('username-field').type(userC.email);
+    cy.getBySel('password-field').type(userC.password);
     cy.getBySel('sign-in-button').click();
     // Current Tasks page
     cy.location('pathname').should('eq', '/tasks/current');

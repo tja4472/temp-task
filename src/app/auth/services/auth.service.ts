@@ -81,6 +81,37 @@ export class AuthService {
     return this.auth.createUserWithEmailAndPassword(email, password);
   }
 
+  /**
+   * Used by Cypress
+   * @param email
+   * @param password
+   * @returns
+   */
+  public signInCypress(
+    email: string,
+    password: string
+  ): Promise<firebase.auth.UserCredential> {
+    return this.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  /**
+   * Used by Cypress
+   * @returns
+   */
+  public signOutCypress(): Promise<void> {
+    return this.auth.signOut();
+  }
+
+  /**
+   * Used by Cypress
+   * @param email
+   * @param password
+   * @returns
+   */
+  public signUpCypress(email: string, password: string) {
+    return this.auth.createUserWithEmailAndPassword(email, password);
+  }
+
   async signUp1(email: string, password: string) {
     const userCredential = await this.auth.createUserWithEmailAndPassword(
       email,
